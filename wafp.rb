@@ -465,6 +465,7 @@ def fetch(paths, uri, pproxy, mthreads, tout, rtry, scan_name, save)
         begin
           Timeout::timeout(tout) do
             # TODO: add proxy support
+            1.times do {
             req = Net::HTTP::Get.new(path, @headers) 
             http = Net::HTTP.new(turi.host, turi.port) 
             req.basic_auth(user, pass) if user and pass
@@ -475,6 +476,11 @@ def fetch(paths, uri, pproxy, mthreads, tout, rtry, scan_name, save)
             end
             res = http.request(req)
             puts "DEBUG: fetched #{path}" if @debug
+            if res == Net::HTTPRedirection then
+              path = URI.parse(res['location']).path
+              redo
+            end
+            }
           end
         rescue Timeout::Error
           if rrtry < rtry then
