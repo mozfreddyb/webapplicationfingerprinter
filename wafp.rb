@@ -459,7 +459,8 @@ def fetch(paths, uri, pproxy, mthreads, tout, rtry, scan_name, save)
         req = nil
         rrtry = 0
         md5sum = nil
-        path = path.to_s.gsub(/^\.\//, '/')
+        path = path.to_s.gsub(/^\.\//, '')
+        path = turi.path !~ /\/$/?("#{turi.path}/"):(turi.path), path
         # fetching the static files...
         begin
           Timeout::timeout(tout) do
