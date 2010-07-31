@@ -43,7 +43,12 @@ begin
 rescue LoadError
 end
 require 'getoptlong'
-require 'sqlite3'
+begin
+	require 'sqlite3'
+rescue LoadError
+	puts "ERROR: please install sqlite3 for ruby!"
+	exit 0 
+end
 # this is a modified version of net/http
 require "lib/wafp_http.rb"
 require "lib/wafp_https.rb"
@@ -459,8 +464,7 @@ def fetch(paths, uri, pproxy, mthreads, tout, rtry, scan_name, save)
         req = nil
         rrtry = 0
         md5sum = nil
-        path = path.to_s.gsub(/^\.\//, '')
-        path = turi.path !~ /\/$/?("#{turi.path}/"):(turi.path), path
+        path = path.to_s.gsub(/^\.\//, '/')
         # fetching the static files...
         begin
           Timeout::timeout(tout) do
