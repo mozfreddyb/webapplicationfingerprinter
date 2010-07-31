@@ -99,7 +99,12 @@ It can be replaced by the following code:
 =end
 
 require "lib/wafp_http.rb"
-require 'openssl'
+begin
+	require 'openssl'
+rescue LoadError
+	puts "ERROR: please install openssl for ruby!"
+	exit 0
+end
 
 module Net
 
