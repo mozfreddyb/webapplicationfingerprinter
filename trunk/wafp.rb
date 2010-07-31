@@ -44,10 +44,10 @@ rescue LoadError
 end
 require 'getoptlong'
 begin
-	require 'sqlite3'
+  require 'sqlite3'
 rescue LoadError
-	puts "ERROR: please install sqlite3 for ruby!"
-	exit 0 
+  puts "ERROR: please install sqlite3 for ruby!"
+  exit 0 
 end
 # this is a modified version of net/http
 require "lib/wafp_http.rb"
@@ -487,6 +487,8 @@ def fetch(paths, uri, pproxy, mthreads, tout, rtry, scan_name, save)
             retry
           else
             puts "\nWARNING: request for \"#{path}\" timed out for #{rtry} times!" if !@quiet
+            threads -= 1
+            next
           end
         rescue =>e
           if rrtry < rtry then
